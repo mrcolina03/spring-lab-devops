@@ -20,4 +20,7 @@ spring:
 logging:
   level:
     root: WARN
-  
+
+jwt:
+  secret: "claveDePrueba"
+  expiration: 3600000
