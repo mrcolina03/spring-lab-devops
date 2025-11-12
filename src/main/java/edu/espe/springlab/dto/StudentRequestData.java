@@ -36,4 +36,5 @@ public class StudentRequestData {
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
+
 }
