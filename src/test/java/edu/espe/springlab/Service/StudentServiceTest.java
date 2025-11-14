@@ -41,7 +41,7 @@ public class StudentServiceTest {
         // Crear nuevo request con el mismo email
         StudentRequestData req = new StudentRequestData();
         req.setFullName("New User Duplicate");
-        req.setEmail("example@example.com");
+        req.setEmail("user@example.com");
         req.setBirthDate(LocalDate.of(2000, 10, 10));
 
         // Verificar que lance excepción por duplicado
