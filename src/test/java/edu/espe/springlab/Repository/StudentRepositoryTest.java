@@ -31,4 +31,6 @@ public class StudentRepositoryTest {
         assertThat(result.get().getFullName()).isEqualTo("Test User");
 
     }
+
+
 }

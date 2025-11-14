@@ -31,7 +31,7 @@ public class StudentServiceTest {
         // Crear estudiante existente
         Student existing = new Student();
         existing.setFullName("Existing User");
-        existing.setEmail("duplicate@example.com");
+        existing.setEmail("test@example.com");
         existing.setBirthDate(LocalDate.of(2000, 10, 10));
         existing.setActive(true);
 
@@ -41,11 +41,13 @@ public class StudentServiceTest {
         // Crear nuevo request con el mismo email
         StudentRequestData req = new StudentRequestData();
         req.setFullName("New User Duplicate");
-        req.setEmail("duplicate@example.com");
+        req.setEmail("example@example.com");
         req.setBirthDate(LocalDate.of(2000, 10, 10));
 
         // Verificar que lance excepción por duplicado
         assertThatThrownBy(() -> service.create(req))
                 .isInstanceOf(ConflictException.class);
     }
+
+
 }

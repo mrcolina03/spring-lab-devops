@@ -1,4 +1,4 @@
-name: CI - Build and test
+name: CI - Examen - Mateo Colina
 
 on:
   push:
