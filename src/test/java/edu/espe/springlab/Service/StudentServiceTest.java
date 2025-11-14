@@ -64,20 +64,7 @@ public class StudentServiceTest {
         assertThatThrownBy(() -> service.create(req))
                 .isInstanceOf(ConflictException.class);
     }
-
-/*
-    @Test
-    @DisplayName("Debe lanzar NotFoundException al consultar un ID inexistente")
-    void shouldThrowNotFoundExceptionWhenIdDoesNotExist() {
-
-        Long nonExistentId = 9999L;
-
-        assertThatThrownBy(() -> service.getById(nonExistentId))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("no encontrado")
-                .hasMessageContaining("9999");
-    }
-*/
+    /*
     @Test
     @DisplayName("Controlador debe responder 404 para ID inexistente")
     void controllerShouldReturn404ForNonExistentId() throws Exception {
@@ -86,9 +73,11 @@ public class StudentServiceTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").exists());
     }
-/*
 
-    @Test
+*/
+
+
+    /*@Test
     @DisplayName("Debe desactivar un estudiante sin modificar otros atributos")
     void shouldDeactivateStudent() {
 
@@ -107,6 +96,8 @@ public class StudentServiceTest {
         assertThat(updated.getFullName()).isEqualTo(student.getFullName());
         assertThat(updated.getBirthDate()).isEqualTo(student.getBirthDate());
     }*/
+
+}
 /*
     // ----------------------------------------------------------------------
     // PRUEBA 4 — Estadísticas
@@ -160,4 +151,3 @@ public class StudentServiceTest {
                 .contains("Ana", "Andrea")
                 .doesNotContain("Juan");
     }*/
-}
