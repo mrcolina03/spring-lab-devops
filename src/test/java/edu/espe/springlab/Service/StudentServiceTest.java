@@ -64,7 +64,7 @@ public class StudentServiceTest {
         assertThatThrownBy(() -> service.create(req))
                 .isInstanceOf(ConflictException.class);
     }
-    /*
+/*
     @Test
     @DisplayName("Controlador debe responder 404 para ID inexistente")
     void controllerShouldReturn404ForNonExistentId() throws Exception {
@@ -74,10 +74,10 @@ public class StudentServiceTest {
                 .andExpect(jsonPath("$.message").exists());
     }
 
+
 */
 
-
-    /*@Test
+    @Test
     @DisplayName("Debe desactivar un estudiante sin modificar otros atributos")
     void shouldDeactivateStudent() {
 
@@ -95,7 +95,7 @@ public class StudentServiceTest {
         assertThat(updated.getEmail()).isEqualTo(student.getEmail());
         assertThat(updated.getFullName()).isEqualTo(student.getFullName());
         assertThat(updated.getBirthDate()).isEqualTo(student.getBirthDate());
-    }*/
+    }
 
 }
 /*
@@ -133,21 +133,4 @@ public class StudentServiceTest {
                 .andExpect(header().string("X-Elapsed-Time", not(emptyString())));
     }
 
-    // ----------------------------------------------------------------------
-    // PRUEBA 6 — Búsqueda por nombre parcial
-    // ----------------------------------------------------------------------
-    @Test
-    @DisplayName("Debe buscar estudiantes por nombre parcial")
-    void shouldSearchByPartialName() {
-
-        repository.save(new Student("Ana", "ana@example.com", LocalDate.now(), true));
-        repository.save(new Student("Andrea", "andrea@example.com", LocalDate.now(), true));
-        repository.save(new Student("Juan", "juan@example.com", LocalDate.now(), true));
-
-        List<Student> result = service.searchByName("an");
-
-        assertThat(result)
-                .extracting(Student::getFullName)
-                .contains("Ana", "Andrea")
-                .doesNotContain("Juan");
     }*/
