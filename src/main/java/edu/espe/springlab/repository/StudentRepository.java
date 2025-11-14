@@ -15,4 +15,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     //Paginacion y busqueda mediante el nombre
     Page<Student> findByFullNameContainingIgnoreCase(String fullName, Pageable pageable);
+
+    long countByActive(boolean active);
 }

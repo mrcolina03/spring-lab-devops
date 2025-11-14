@@ -98,39 +98,6 @@ public class StudentServiceTest {
     }
 
 }
-/*
-    // ----------------------------------------------------------------------
-    // PRUEBA 4 — Estadísticas
-    // ----------------------------------------------------------------------
-    @Test
-    @DisplayName("Debe retornar estadísticas correctas")
-    void shouldReturnCorrectStats() {
 
-        repository.save(new Student("Ana", "ana@example.com",
-                LocalDate.of(2001, 1, 1), true));
-        repository.save(new Student("Luis", "luis@example.com",
-                LocalDate.of(2002, 2, 2), true));
-        repository.save(new Student("Pedro", "pedro@example.com",
-                LocalDate.of(2003, 3, 3), false));
 
-        var stats = service.getStats();
 
-        assertThat(stats.total()).isEqualTo(3);
-        assertThat(stats.active()).isEqualTo(2);
-        assertThat(stats.inactive()).isEqualTo(1);
-    }
-
-    // ----------------------------------------------------------------------
-    // PRUEBA 5 — Interceptor agrega X-Elapsed-Time
-    // ----------------------------------------------------------------------
-    @Test
-    @DisplayName("Interceptor debe agregar el header X-Elapsed-Time")
-    void shouldAddElapsedTimeHeader() throws Exception {
-
-        mockMvc.perform(get("/students"))
-                .andExpect(status().isOk())
-                .andExpect(header().exists("X-Elapsed-Time"))
-                .andExpect(header().string("X-Elapsed-Time", not(emptyString())));
-    }
-
-    }*/
