@@ -11,9 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.context.annotation.Import;
+
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -28,8 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.emptyString;
 
-@DataJpaTest
-@Import(StudentServiceImpl.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class StudentServiceTest {
 
@@ -47,24 +46,28 @@ public class StudentServiceTest {
     @DisplayName("Debe lanzar excepción si se intenta registrar un email duplicado")
     void shouldNotAllowDuplicateEmails() {
 
+        // Estudiante existente
         Student existing = new Student();
         existing.setFullName("Existing User");
         existing.setEmail("test@example.com");
         existing.setBirthDate(LocalDate.of(2000, 10, 10));
         existing.setActive(true);
-
         repository.save(existing);
 
+        // Request duplicado
         StudentRequestData req = new StudentRequestData();
         req.setFullName("Nuevo Usuario");
         req.setEmail("test@example.com");
-        req.setBirthDate(LocalDate.of(2001, 10, 10));
+        req.setBirthDate(LocalDate.of(2000, 10, 10));
 
+        // Validación
         assertThatThrownBy(() -> service.create(req))
                 .isInstanceOf(ConflictException.class);
     }
-
 /*
+    // ----------------------------------------------------------------------
+    // PRUEBA 2 — ID inexistente
+    // ----------------------------------------------------------------------
     @Test
     @DisplayName("Debe lanzar NotFoundException al consultar un ID inexistente")
     void shouldThrowNotFoundExceptionWhenIdDoesNotExist() {
@@ -80,12 +83,15 @@ public class StudentServiceTest {
     @Test
     @DisplayName("Controlador debe responder 404 para ID inexistente")
     void controllerShouldReturn404ForNonExistentId() throws Exception {
+
         mockMvc.perform(get("/students/9999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").exists());
     }
 
-
+    // ----------------------------------------------------------------------
+    // PRUEBA 3 — Desactivar estudiante
+    // ----------------------------------------------------------------------
     @Test
     @DisplayName("Debe desactivar un estudiante sin modificar otros atributos")
     void shouldDeactivateStudent() {
@@ -95,7 +101,6 @@ public class StudentServiceTest {
         student.setEmail("carlos@example.com");
         student.setBirthDate(LocalDate.of(2000, 5, 20));
         student.setActive(true);
-
         repository.save(student);
 
         service.deactivate(student.getId());
@@ -108,17 +113,17 @@ public class StudentServiceTest {
         assertThat(updated.getBirthDate()).isEqualTo(student.getBirthDate());
     }
 
-
+    // ----------------------------------------------------------------------
+    // PRUEBA 4 — Estadísticas
+    // ----------------------------------------------------------------------
     @Test
     @DisplayName("Debe retornar estadísticas correctas")
     void shouldReturnCorrectStats() {
 
         repository.save(new Student("Ana", "ana@example.com",
                 LocalDate.of(2001, 1, 1), true));
-
         repository.save(new Student("Luis", "luis@example.com",
                 LocalDate.of(2002, 2, 2), true));
-
         repository.save(new Student("Pedro", "pedro@example.com",
                 LocalDate.of(2003, 3, 3), false));
 
@@ -129,7 +134,9 @@ public class StudentServiceTest {
         assertThat(stats.inactive()).isEqualTo(1);
     }
 
-
+    // ----------------------------------------------------------------------
+    // PRUEBA 5 — Interceptor agrega X-Elapsed-Time
+    // ----------------------------------------------------------------------
     @Test
     @DisplayName("Interceptor debe agregar el header X-Elapsed-Time")
     void shouldAddElapsedTimeHeader() throws Exception {
@@ -140,7 +147,9 @@ public class StudentServiceTest {
                 .andExpect(header().string("X-Elapsed-Time", not(emptyString())));
     }
 
-
+    // ----------------------------------------------------------------------
+    // PRUEBA 6 — Búsqueda por nombre parcial
+    // ----------------------------------------------------------------------
     @Test
     @DisplayName("Debe buscar estudiantes por nombre parcial")
     void shouldSearchByPartialName() {
