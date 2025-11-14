@@ -1,7 +1,7 @@
 spring:
   # Configuración del data source
   datasource:
-    url: jdbc:mysql://localhost:3306/spring_lab?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/spring_lab?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
