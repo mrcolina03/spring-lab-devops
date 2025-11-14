@@ -64,10 +64,8 @@ public class StudentServiceTest {
         assertThatThrownBy(() -> service.create(req))
                 .isInstanceOf(ConflictException.class);
     }
-/*
-    // ----------------------------------------------------------------------
-    // PRUEBA 2 — ID inexistente
-    // ----------------------------------------------------------------------
+
+
     @Test
     @DisplayName("Debe lanzar NotFoundException al consultar un ID inexistente")
     void shouldThrowNotFoundExceptionWhenIdDoesNotExist() {
@@ -88,7 +86,7 @@ public class StudentServiceTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").exists());
     }
-
+/*
     // ----------------------------------------------------------------------
     // PRUEBA 3 — Desactivar estudiante
     // ----------------------------------------------------------------------
