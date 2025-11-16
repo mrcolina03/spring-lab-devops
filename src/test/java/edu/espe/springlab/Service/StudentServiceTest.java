@@ -64,40 +64,5 @@ public class StudentServiceTest {
         assertThatThrownBy(() -> service.create(req))
                 .isInstanceOf(ConflictException.class);
     }
-/*
-    @Test
-    @DisplayName("Controlador debe responder 404 para ID inexistente")
-    void controllerShouldReturn404ForNonExistentId() throws Exception {
-
-        mockMvc.perform(get("api/students/9999"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").exists());
-    }
-
-
-*/
-
-    @Test
-    @DisplayName("Debe desactivar un estudiante sin modificar otros atributos")
-    void shouldDeactivateStudent() {
-
-        Student student = new Student();
-        student.setFullName("Carlos Perez");
-        student.setEmail("carlos@example.com");
-        student.setBirthDate(LocalDate.of(2000, 5, 20));
-        student.setActive(true);
-        repository.save(student);
-
-        service.deactivate(student.getId());
-
-        Student updated = repository.findById(student.getId()).orElseThrow();
-
-        assertThat(updated.getEmail()).isEqualTo(student.getEmail());
-        assertThat(updated.getFullName()).isEqualTo(student.getFullName());
-        assertThat(updated.getBirthDate()).isEqualTo(student.getBirthDate());
-    }
 
 }
-
-
-

@@ -32,28 +32,6 @@ public class StudentRepositoryTest {
         assertThat(result.get().getFullName()).isEqualTo("Test User");
 
     }
-/*
-    @Test
-    @DisplayName("Debe retornar estadísticas correctas desde el repositorio")
-    void shouldReturnCorrectStats() {
 
-        studentRepository.save(new Student("Ana", "ana@example.com",
-                LocalDate.of(2001, 1, 1), true));
-
-        studentRepository.save(new Student("Luis", "luis@example.com",
-                LocalDate.of(2002, 2, 2), true));
-
-        studentRepository.save(new Student("Pedro", "pedro@example.com",
-                LocalDate.of(2003, 3, 3), false));
-
-        long total = studentRepository.count();
-        long active = studentRepository.countByActive(true);
-        long inactive = studentRepository.countByActive(false);
-
-        assertThat(total).isEqualTo(3);
-        assertThat(active).isEqualTo(2);
-        assertThat(inactive).isEqualTo(1);
-    }
-*/
 
 }
