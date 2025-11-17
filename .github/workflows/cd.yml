@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "Checking deploy status for: $DEPLOY_ID"
 
-          for i in {1..40}; do
+          for i in {1..50}; do
             status=$(curl -s \
               -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
               "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys/$DEPLOY_ID" \
@@ -34,13 +34,19 @@ jobs:
 
             echo "Status: $status"
 
+            # SUCCESS states
             if [[ "$status" == "live" ]]; then
               echo "Deployment successful!"
               exit 0
             fi
 
-            if [[ "$status" == "failed" || "$status" == "canceled" ]]; then
-              echo "Deployment failed"
+            # FAILURE states - Render uses multiple variations
+            if [[ "$status" == "build_failed" || \
+                  "$status" == "deploy_failed" || \
+                  "$status" == "update_failed" || \
+                  "$status" == "failed" || \
+                  "$status" == "canceled" ]]; then
+              echo "Render deployment failed with status: $status"
               exit 1
             fi
 
