@@ -18,6 +18,6 @@ ENV APP_VERSION=${APP_VERSION}
 ENV BUILD_NUMBER=${BUILD_NUMBER}
 ENV COMMIT_SHA=${COMMIT_SHA}
 
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/archivo_inexistente.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
