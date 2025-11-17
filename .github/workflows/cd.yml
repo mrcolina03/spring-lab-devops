@@ -11,14 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Render Deploy
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set version variables
+        id: version
+        run: |
+          echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+          echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "APP_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+
+          echo "App Version: $APP_VERSION"
+          echo "Commit: $COMMIT_SHA"
+          echo "Build Number: $BUILD_NUMBER"
+
+      - name: Trigger Render Deploy (with version info)
         id: trigger
         run: |
-          response=$(curl -s -X POST ${{ secrets.RENDER_DEPLOY_HOOK }})
+          echo "Deploying version: $APP_VERSION"
+          echo "Commit SHA: $COMMIT_SHA"
+
+          response=$(curl -s -X POST \
+            -H "Accept: application/json" \
+            ${{ secrets.RENDER_DEPLOY_HOOK }})
+
           echo "RESPONSE: $response"
-          
           deploy_id=$(echo "$response" | jq -r '.deploy.id')
-          
           echo "DEPLOY_ID=$deploy_id" >> $GITHUB_ENV
 
       - name: Wait for Render Deployment
@@ -40,7 +58,7 @@ jobs:
               exit 0
             fi
 
-            # FAILURE states - Render uses multiple variations
+            # FAILURE states
             if [[ "$status" == "build_failed" || \
                   "$status" == "deploy_failed" || \
                   "$status" == "update_failed" || \
