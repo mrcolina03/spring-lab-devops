@@ -1,12 +1,23 @@
 # Etapa 1: Build
-FROM gradle:8.4-jdk17 AS builder
+FROM gradle:8.4-jdk24 AS builder
 WORKDIR /app
 COPY . .
-RUN gradle clean bootjar
+RUN gradle clean bootJar
 
-# Etapa2: Run
-FROM eclipse-temurin:17-jdk
+# Etapa 2: Run
+FROM eclipse-temurin:24-jdk
 WORKDIR /app
-COPY --from=builder /app/build/libs/ARCHIVO_INEXISTENTE.jar app.jar
+
+# Argumentos de build para versionamiento
+ARG APP_VERSION=1.0.0-dev
+ARG BUILD_NUMBER=local
+ARG COMMIT_SHA=unknown
+
+# Variables de entorno
+ENV APP_VERSION=${APP_VERSION}
+ENV BUILD_NUMBER=${BUILD_NUMBER}
+ENV COMMIT_SHA=${COMMIT_SHA}
+
+COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
