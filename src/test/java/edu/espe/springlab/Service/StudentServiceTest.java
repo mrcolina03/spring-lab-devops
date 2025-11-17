@@ -54,10 +54,10 @@ public class StudentServiceTest {
         existing.setActive(true);
         repository.save(existing);
 
-        // Request duplicado
+        // Request duplicado . Prueba forzada a fallar
         StudentRequestData req = new StudentRequestData();
         req.setFullName("Nuevo Usuario");
-        req.setEmail("test@example.com");
+        req.setEmail("testNuevo@example.com");
         req.setBirthDate(LocalDate.of(2000, 10, 10));
 
         // Validación
