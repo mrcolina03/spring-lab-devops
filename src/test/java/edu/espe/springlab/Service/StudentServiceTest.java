@@ -57,7 +57,7 @@ public class StudentServiceTest {
         // Request duplicado . Prueba forzada a fallar
         StudentRequestData req = new StudentRequestData();
         req.setFullName("Nuevo Usuario");
-        req.setEmail("testNuevo@example.com");
+        req.setEmail("test@example.com");
         req.setBirthDate(LocalDate.of(2000, 10, 10));
 
         // Validación
