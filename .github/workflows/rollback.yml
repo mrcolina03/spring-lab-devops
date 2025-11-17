@@ -24,7 +24,7 @@ jobs:
           
           # Encontrar el último deploy exitoso (excluyendo el actual)
           last_successful=$(echo "$response" | jq -r '
-            [.[] | select(.status == "live")] | 
+            [.[] | select(.deploy.status == "live")] | 
             .[1].id // empty
           ')
           
