@@ -3,17 +3,49 @@ name: CD-Mateo-Colina
 on:
   workflow_run:
     workflows: ["CI-Mateo-Colina"]
-    types:
-      - completed
-
-
+    types: [completed]
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Trigger Render Deploy
+        id: trigger
         run: |
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+          response=$(curl -s -X POST ${{ secrets.RENDER_DEPLOY_HOOK }})
+          echo "RESPONSE: $response"
+          
+          deploy_id=$(echo "$response" | jq -r '.deploy.id')
+          
+          echo "DEPLOY_ID=$deploy_id" >> $GITHUB_ENV
+
+      - name: Wait for Render Deployment
+        id: wait
+        run: |
+          echo "Checking deploy status for: $DEPLOY_ID"
+
+          for i in {1..40}; do
+            status=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+              "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys/$DEPLOY_ID" \
+              | jq -r '.status')
+
+            echo "Status: $status"
+
+            if [[ "$status" == "live" ]]; then
+              echo "Deployment successful!"
+              exit 0
+            fi
+
+            if [[ "$status" == "failed" || "$status" == "canceled" ]]; then
+              echo "Deployment failed"
+              exit 1
+            fi
+
+            sleep 10
+          done
+
+          echo "Timeout esperando despliegue"
+          exit 1
