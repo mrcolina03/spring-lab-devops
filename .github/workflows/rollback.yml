@@ -1,0 +1,53 @@
+name: Rollback
+
+on:
+  workflow_dispatch:  # Permite ejecución manual
+  workflow_run:
+    workflows: ["CD - Deploy to Render"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  check-deployment:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+
+    steps:
+      - name: Get Latest Deploys
+        id: get-deploys
+        run: |
+          response=$(curl -s -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys?limit=5")
+          
+          echo "Deploys response:"
+          echo "$response" | jq '.'
+          
+          # Encontrar el último deploy exitoso (excluyendo el actual)
+          last_successful=$(echo "$response" | jq -r '
+            [.[] | select(.status == "live")] | 
+            .[1].id // empty
+          ')
+          
+          if [ -z "$last_successful" ]; then
+            echo "No se encontró un deploy exitoso previo"
+            exit 1
+          fi
+          
+          echo "last_successful_deploy=$last_successful" >> $GITHUB_OUTPUT
+
+      - name: Trigger Rollback
+        run: |
+          echo "Ejecutando rollback al deploy: ${{ steps.get-deploys.outputs.last_successful_deploy }}"
+          
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys/${{ steps.get-deploys.outputs.last_successful_deploy }}/rollback"
+
+      - name: Notify Rollback
+        if: success()
+        run: |
+          echo "Rollback completado exitosamente"
+          echo "Se ha revertido al deploy: ${{ steps.get-deploys.outputs.last_successful_deploy }}"
