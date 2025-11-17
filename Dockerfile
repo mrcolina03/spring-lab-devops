@@ -1,11 +1,11 @@
 # Etapa 1: Build
-FROM gradle:8.4-jdk24 AS builder
+FROM gradle:8.4-jdk17 AS builder
 WORKDIR /app
 COPY . .
 RUN gradle clean bootJar
 
 # Etapa 2: Run
-FROM eclipse-temurin:24-jdk
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Argumentos de build para versionamiento
