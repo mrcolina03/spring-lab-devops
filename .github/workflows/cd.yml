@@ -1,12 +1,11 @@
-name: CD - Deploy to Render
+name: CD-Mateo-Colina
 
 on:
   workflow_run:
-    workflows: ["CI Mateo Colina"]
+    workflows: ["CI-Mateo-Colina"]
     types:
       - completed
-    branches:
-      - main
+
 
 
 jobs:

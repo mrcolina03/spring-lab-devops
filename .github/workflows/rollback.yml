@@ -3,11 +3,9 @@ name: Rollback
 on:
   workflow_dispatch:  # Permite ejecución manual
   workflow_run:
-    workflows: ["CD - Deploy to Render"]
+    workflows: ["CD-Mateo-Colina"]
     types:
       - completed
-    branches:
-      - main
 
 jobs:
   check-deployment:
