@@ -38,11 +38,12 @@ jobs:
       - name: Trigger Rollback
         run: |
           echo "Ejecutando rollback al deploy: ${{ steps.get-deploys.outputs.last_successful_deploy }}"
-          
+
           curl -X POST \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             -H "Content-Type: application/json" \
-            "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys/${{ steps.get-deploys.outputs.last_successful_deploy }}/rollback"
+            -d "{\"deployId\":\"${{ steps.get-deploys.outputs.last_successful_deploy }}\"}" \
+            "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/rollback"
 
       - name: Notify Rollback
         if: success()
