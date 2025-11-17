@@ -1,0 +1,30 @@
+# Configuración del perfil 'cd' que utiliza H2 en memoria
+spring:
+  datasource:
+    # H2 en memoria para el despliegue
+    url: jdbc:h2:mem:spring_lab_cd;DB_CLOSE_DELAY=-1;MODE=MYSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        # Fija el dialecto de forma explícita, resolviendo el error de inicialización
+        dialect: org.hibernate.dialect.H2Dialect
+
+  sql:
+    init:
+      mode: never
+
+logging:
+  level:
+    root: WARN
+
+# Los secretos JWT se heredan de application.yml, pero si desea usar
+# la clave de prueba para CD, puede incluirla aquí (anulará la otra)
+# jwt:
+#   secret: "claveDePrueba"
+#   expiration: 3600000
